@@ -12,7 +12,7 @@ EMBEDDINGS_MODEL = os.getenv('EMBEDDINGS_MODEL')
 class RetrievalGeneration:
     def __init__(self, vector_db):
         self.vector_db = vector_db
-        self.retriever = self.vector_db.as_retriever(search_kwargs={'k': 5})
+        self.retriever = self.vector_db.as_retriever(search_kwargs={'k': 10})
         self.model = init_chat_model(model=MODEL)
 
     def retrieve_chunks(self, user_query):
@@ -26,9 +26,9 @@ class RetrievalGeneration:
         )
 
         prompt = f'''
-            You are a research paper assistant.
+            You are a PDF document Q&A assistant.
 
-            Use the context below to answer the user question.
+            Use the provided context from the document to answer the user's question accurately.
 
             Context:
             {context}
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     )
     print('Generating Response...')
     rag = RetrievalGeneration(vector_db)
-    query = 'What are the skills of this individual and how employable are they?'
+    query = 'Summarize this paper, tell me about the title, little but about literature review, methodology, any algorithms mentioned etc.'
     response = rag.generate_response(query)
 
     print(f'Response:\n {response}')

@@ -3,14 +3,11 @@ langchain
 langchain-core
 langchain-community
 langchain-google-genai
+langchain-openai
 langchain-text-splitters
 langchain-pymupdf4llm
 langchain_chroma
 chromadb
-
-# FastAPI
-fastapi
-uvicorn
 
 # ENV Libraries
 python-dotenv

@@ -1,7 +1,6 @@
 from langchain_openai import OpenAIEmbeddings
 from langchain_pymupdf4llm import PyMuPDF4LLMLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_text_splitters import MarkdownTextSplitter
+from langchain_text_splitters import MarkdownHeaderTextSplitter
 from langchain_chroma import Chroma
 import os
 import shutil
@@ -17,9 +16,12 @@ class DocumentIngestion:
         self.embedding_model = OpenAIEmbeddings(model=EMBEDDINGS_MODEL)
         self.pdf_path = pdf_path
         self.loader = PyMuPDF4LLMLoader(file_path=self.pdf_path)
-        self.splitter = RecursiveCharacterTextSplitter(
-            chunk_size=800,
-            chunk_overlap=200
+        self.splitter = MarkdownHeaderTextSplitter(
+            headers_to_split_on=[
+                ('#', 'Header 1'),
+                ('##', 'Header 2'),
+                ('###', 'Header 3'),
+            ]
         )
 
     def load_document(self):
@@ -28,7 +30,9 @@ class DocumentIngestion:
 
     def initialise_chunking(self):
         docs = self.load_document()
-        chunks = self.splitter.split_documents(docs)
+        docs_text = '\n\n'.join([doc.page_content for doc in docs])
+        chunks = self.splitter.split_text(docs_text)
+        
         return chunks
     
     def generate_embeddings(self):
@@ -45,8 +49,7 @@ class DocumentIngestion:
         return vector_store
     
 if __name__=='__main__':
-    # pdf_path = 'database/Ansari_Mohammed_Afzal_CS4700_Dissertation_Report.pdf'
-    pdf_path = 'database/Ansari Mohammed Afzal_Resume.pdf'
+    pdf_path = 'database/Modeling dynamic urban growth using cellular automata and particle swarm.pdf'
     print('Loading Document...')
     document_ingestor = DocumentIngestion(pdf_path)
     print('Creating Chunks...')
