@@ -1,0 +1,20 @@
+# AI Libraies
+langchain
+langchain-core
+langchain-community
+langchain-google-genai
+langchain-text-splitters
+langchain-pymupdf4llm
+langchain_chroma
+chromadb
+
+# FastAPI
+fastapi
+uvicorn
+
+# ENV Libraries
+python-dotenv
+
+# Other Libraries
+pymupdf
+streamlit
